@@ -1,0 +1,12 @@
+.env
+*.sqlite3
+*.pdf
+output/
+data/playwright/*
+!data/playwright/README.md
+main-system/bydfi-audit-bot/data/reports/*
+!main-system/bydfi-audit-bot/data/reports/README.md
+main-system/bydfi-audit-bot/config/lark_group_registry.private.json
+__pycache__/
+.pytest_cache/
+.DS_Store
