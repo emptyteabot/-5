@@ -1,0 +1,4 @@
+interface:
+  display_name: "BYDFI McKinsey Report"
+  short_description: "One-line BYDFI daily or weekly CEO report workflow"
+  default_prompt: "Run today's incremental BYDFI management report workflow, refresh coverage, update the final CEO brief if needed, self-review it, and export the PDF."
