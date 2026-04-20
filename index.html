@@ -1,0 +1,444 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>管理雷达 · ExecRadar AI</title>
+  <style>
+    :root {
+      --bg: #09111f;
+      --bg2: #0f172a;
+      --panel: rgba(15, 23, 42, 0.84);
+      --line: rgba(255,255,255,0.08);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --green: #34d399;
+      --blue: #60a5fa;
+      --red: #fb7185;
+      --yellow: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(52,211,153,0.12), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(96,165,250,0.12), transparent 30%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+    }
+    a { color: inherit; }
+    .wrap { width: min(1160px, calc(100vw - 40px)); margin: 0 auto; }
+    .hero { padding: 72px 0 34px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      color: #cbd5e1;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(44px, 7vw, 78px);
+      line-height: .96;
+      letter-spacing: -.06em;
+    }
+    .sub {
+      max-width: 820px;
+      font-size: 20px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+    .cta-row {
+      margin-top: 28px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 15px;
+      border: 1px solid var(--line);
+      transition: .18s ease;
+    }
+    .btn.primary { background: linear-gradient(135deg, #22c55e, #14b8a6); color: #04110c; }
+    .btn.secondary { background: rgba(255,255,255,0.04); color: var(--text); }
+    .btn:hover { transform: translateY(-1px); }
+    .hero-foot {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 20px;
+      padding-bottom: 26px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 90px rgba(0,0,0,.32);
+    }
+    .video-wrap video {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #020617;
+    }
+    .panel-body { padding: 22px; }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .metric {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+    }
+    .metric strong {
+      display: block;
+      font-size: 28px;
+      letter-spacing: -.03em;
+      margin-bottom: 6px;
+    }
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .section { padding: 24px 0 8px; }
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 32px;
+      letter-spacing: -.04em;
+    }
+    .section p.lead {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .card {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -.02em;
+    }
+    .card p, .card li {
+      color: #cbd5e1;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+    .card ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+    .strip {
+      margin-top: 12px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.025);
+      color: #dbeafe;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .price-card {
+      padding: 22px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    .price-card.featured {
+      border-color: rgba(52,211,153,.35);
+      box-shadow: 0 0 0 1px rgba(52,211,153,.08) inset;
+    }
+    .badge {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(52,211,153,.12);
+      border: 1px solid rgba(52,211,153,.22);
+      color: #bbf7d0;
+      margin-bottom: 10px;
+    }
+    .price {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -.04em;
+      margin: 8px 0 2px;
+    }
+    .price-card ul {
+      margin: 14px 0 0;
+      padding-left: 18px;
+    }
+    .faq {
+      display: grid;
+      gap: 14px;
+    }
+    .faq-item {
+      padding: 18px 20px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+    }
+    .faq-item strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    .faq-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .cta-final {
+      margin: 28px 0 46px;
+      padding: 26px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      text-align: center;
+    }
+    .cta-final h2 { margin: 0 0 10px; font-size: 34px; letter-spacing: -.04em; }
+    .cta-final p { margin: 0 0 18px; color: var(--muted); font-size: 16px; }
+    .footer {
+      padding: 0 0 42px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+    @media (max-width: 980px) {
+      .grid, .cards, .two-col, .price-grid { grid-template-columns: 1fr; }
+      .metric-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .metric-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Founder Operating Brief</div>
+      <h1>别再靠爬群做管理。</h1>
+      <p class="sub">
+        管理雷达（ExecRadar AI）会自动把高噪音飞书群压成一页创始人简报。
+        你每天早上不再看几千条消息，而是直接看：哪里卡住了、哪里会延期、谁负责、今天该拍什么板。
+      </p>
+      <div class="cta-row">
+        <a class="btn primary" href="#contact">私信获取源码版 · $199</a>
+        <a class="btn secondary" href="#contact">私信预约私有部署 · $899</a>
+      </div>
+      <div class="hero-foot">合成演示数据，不包含任何真实公司数据。当前采用私信成交，不走公开支付页。</div>
+    </section>
+
+    <section class="grid">
+      <div class="panel video-wrap">
+        <video controls playsinline preload="metadata">
+          <source src="./ExecRadarAI_demo_hyperreal_final.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="panel">
+        <div class="panel-body">
+          <h2 style="margin:0 0 6px;font-size:28px;letter-spacing:-.03em;">创始人买的不是脚本，而是注意力回收。</h2>
+          <p class="lead" style="margin-bottom:14px;">
+            这不是聊天总结工具，而是一套管理层决策压缩系统。它把群里的过程噪音，压成创始人每天早上能直接拍板的一页。
+          </p>
+          <div class="metric-grid">
+            <div class="metric">
+              <strong>少看群</strong>
+              <span>把几千条飞书消息压缩成一页可读结论。</span>
+            </div>
+            <div class="metric">
+              <strong>更早发现风险</strong>
+              <span>把延期、推诿、责任人缺失提前暴露。</span>
+            </div>
+            <div class="metric">
+              <strong>更快拍板</strong>
+              <span>每天只看真正影响收入、上线和交付的事项。</span>
+            </div>
+            <div class="metric">
+              <strong>跨团队统一口径</strong>
+              <span>市场、研发、销售、运营不再各说各话。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>它替代的不是工具，而是低效管理方式。</h2>
+      <p class="lead">
+        很多创始人不是没有数据，而是数据全散在群里。每个人都在说“我在推进”，却没有人能在 30 秒内回答：今天最危险的事是什么。
+      </p>
+      <div class="cards">
+        <div class="card">
+          <h3>之前</h3>
+          <p>9 个群、几千条消息、几十个人同时发言。你看到的是热闹，不是结论。</p>
+        </div>
+        <div class="card">
+          <h3>之后</h3>
+          <p>每天只看一页：阻塞、风险、责任人、今天必须拍板的事。</p>
+        </div>
+        <div class="card">
+          <h3>结果</h3>
+          <p>更少爬楼，更少扯皮，更早发现问题，更快推进执行。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>适合谁</h2>
+      <div class="two-col">
+        <div class="strip">
+          <strong>最适合的团队</strong>
+          <ul>
+            <li>Web3 团队</li>
+            <li>出海团队</li>
+            <li>远程团队</li>
+            <li>跨时区团队</li>
+          </ul>
+        </div>
+        <div class="strip">
+          <strong>最适合的场景</strong>
+          <ul>
+            <li>版本上线前风险预警</li>
+            <li>跨部门同步降噪</li>
+            <li>创始人日报 / 周报</li>
+            <li>事故复盘与责任人收束</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>产品能力</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>自动抓取</h3>
+          <p>自动拉取指定飞书 / Lark 业务群消息。</p>
+        </div>
+        <div class="card">
+          <h3>管理提炼</h3>
+          <p>提炼阻塞、延期风险、责任人空缺和今日动作。</p>
+        </div>
+        <div class="card">
+          <h3>高管输出</h3>
+          <p>每天或每周生成一页管理层简报和 PDF。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>套餐</h2>
+      <div class="price-grid">
+        <div class="price-card">
+          <div class="badge">适合自己部署</div>
+          <h3 style="margin:0;font-size:22px;">源码版</h3>
+          <div class="price">$199</div>
+          <p style="color:var(--muted);line-height:1.7;">适合有技术同事、想自己部署的团队。</p>
+          <ul>
+            <li>源码</li>
+            <li>安装文档</li>
+            <li>合成演示包</li>
+            <li>高管简报模板</li>
+            <li>一键运行脚本</li>
+          </ul>
+          <a class="btn primary" style="margin-top:18px;width:100%;" href="#contact">私信获取源码版</a>
+        </div>
+        <div class="price-card featured">
+          <div class="badge">最省事</div>
+          <h3 style="margin:0;font-size:22px;">私有部署版</h3>
+          <div class="price">$899</div>
+          <p style="color:var(--muted);line-height:1.7;">适合希望尽快跑起来、不想自己折腾的创始人。</p>
+          <ul>
+            <li>包含源码版全部内容</li>
+            <li>远程部署</li>
+            <li>Lark 连接配置</li>
+            <li>日报 / 周报任务接通</li>
+            <li>首份报告跑通</li>
+          </ul>
+          <a class="btn primary" style="margin-top:18px;width:100%;" href="#contact">私信预约私有部署</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>FAQ</h2>
+      <div class="faq">
+        <div class="faq-item">
+          <strong>这是员工监控工具吗？</strong>
+          <p>不是。对外定位是管理降噪与风险预警系统，帮助管理层更快看清执行风险。</p>
+        </div>
+        <div class="faq-item">
+          <strong>演示用的是真实数据吗？</strong>
+          <p>不是。全部是合成演示数据。</p>
+        </div>
+        <div class="faq-item">
+          <strong>只能给 Web3 团队用吗？</strong>
+          <p>不是。任何高噪音、跨团队、跨时区的飞书 / Slack 场景都适用。</p>
+        </div>
+        <div class="faq-item">
+          <strong>这是 SaaS 吗？</strong>
+          <p>目前不是。当前模式是源码交付 + 私有部署。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-final" id="contact">
+      <h2>别再让管理判断埋在群里。</h2>
+      <p>让管理雷达（ExecRadar AI）每天早上把真正重要的东西直接送到你眼前。当前采用私信成交：想看完整部署说明、源码版清单或私有部署流程，直接私信我。</p>
+      <div class="cta-row" style="justify-content:center;">
+        <a class="btn primary" href="#contact">私信我：源码版</a>
+        <a class="btn secondary" href="#contact">私信我：私有部署</a>
+      </div>
+      <div class="hero-foot" style="margin-top:14px;">统一私信口令：<strong>brief</strong></div>
+    </section>
+
+    <section class="footer">
+      合成演示数据，仅用于展示产品逻辑。
+    </section>
+  </div>
+</body>
+</html>
+
