@@ -1,0 +1,34 @@
+{
+  "version": "public-template",
+  "description": "Public-safe placeholder registry. Replace with internal real registry before use.",
+  "collector": {
+    "external_collector_path": "../../lark-collector/external_group_collector.py",
+    "storage_state_path": "../../lark-collector/data/playwright/lark_storage_state.json",
+    "search_terms": [
+      "研发",
+      "任务",
+      "项目",
+      "周报",
+      "需求"
+    ],
+    "search_exhaustive": true,
+    "search_limit": 400,
+    "scroll_iterations": 18
+  },
+  "groups": [
+    {
+      "title": "核心群A",
+      "category": "经营主群",
+      "required": true,
+      "priority": "p0",
+      "notes": "Replace with internal group title and real metadata."
+    },
+    {
+      "title": "核心群B",
+      "category": "研发任务",
+      "required": true,
+      "priority": "p0",
+      "notes": "Replace with internal group title and real metadata."
+    }
+  ]
+}
