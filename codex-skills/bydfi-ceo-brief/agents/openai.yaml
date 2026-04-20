@@ -1,0 +1,4 @@
+interface:
+  display_name: "BYDFI CEO Brief"
+  short_description: "Generate BYDFI CEO-ready brief PDFs"
+  default_prompt: "Update the BYDFI CEO brief from the latest Lark-derived data, keep it management-safe, and export the PDF."
